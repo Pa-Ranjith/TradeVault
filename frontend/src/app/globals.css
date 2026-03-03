@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: var(--bg-main);
+  --color-foreground: var(--text-main);
+
+  --color-bg-main: var(--bg-main);
+  --color-bg-panel: var(--bg-panel);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-danger: var(--danger);
+  --color-border-soft: var(--border);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  :root {
+    --bg-main: #FFF5F5;
+    --bg-panel: #FFFFFF;
+    --text-main: #2D3436;
+    --text-muted: #636E72;
+    --primary: #E8B4B8;
+    --secondary: #A8D5BA;
+    --cta: #D4AF37;
+    --cta-hover: #C5A028;
+    --danger: #FF7675;
+    --border: #F1E8E8;
+    --radius: 16px;
+  }
+
+  .dark {
+    --bg-main: #0B0E14;
+    --bg-panel: #151A22;
+    --text-main: #FDFBF7;
+    --text-muted: #8B9CA7;
+    --primary: #5A7E9A;
+    --secondary: #63B984;
+    --cta: #E5C158;
+    --cta-hover: #F2D57D;
+    --danger: #FF6B6B;
+    --border: #242B35;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border-soft;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
