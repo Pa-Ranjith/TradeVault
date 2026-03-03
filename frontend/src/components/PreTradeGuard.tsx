@@ -5,7 +5,7 @@ import { Shield, PieChart, Activity, Zap, Edit3, Check } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 
 export function PreTradeGuard() {
-    const { resetTrigger } = useApp();
+    const { resetTrigger, setGuardReady } = useApp();
     const [activeTab, setActiveTab] = useState<"analysis" | "psychology">("analysis");
     const [activeRatTab, setActiveRatTab] = useState<"fundamentals" | "technicals" | "signal" | "custom">("fundamentals");
 
@@ -25,6 +25,14 @@ export function PreTradeGuard() {
     const toggleCheck = (id: keyof typeof checks) => {
         setChecks(prev => ({ ...prev, [id]: !prev[id] }));
     };
+
+    // Push guard readiness to AppContext
+    // Rule: Psychology ≥50% (≥2 of 4) AND at least one analysis selection
+    useEffect(() => {
+        const psychReady = checkedCount >= 2; // ≥50%
+        const analysisReady = !!(fundamentals || technicals || signal);
+        setGuardReady(psychReady && analysisReady);
+    }, [checkedCount, fundamentals, technicals, signal, setGuardReady]);
 
     // Global Reset Listener
     useEffect(() => {

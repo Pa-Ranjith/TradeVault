@@ -1,0 +1,186 @@
+[
+    {
+        "symbol": "EURUSD",
+        "name": "Euro / US Dollar"
+    },
+    {
+        "symbol": "GBPUSD",
+        "name": "British Pound / US Dollar"
+    },
+    {
+        "symbol": "USDJPY",
+        "name": "US Dollar / Japanese Yen"
+    },
+    {
+        "symbol": "AUDUSD",
+        "name": "Australian Dollar / US Dollar"
+    },
+    {
+        "symbol": "USDCAD",
+        "name": "US Dollar / Canadian Dollar"
+    },
+    {
+        "symbol": "USDCHF",
+        "name": "US Dollar / Swiss Franc"
+    },
+    {
+        "symbol": "NZDUSD",
+        "name": "New Zealand Dollar / US Dollar"
+    },
+    {
+        "symbol": "EURGBP",
+        "name": "Euro / British Pound"
+    },
+    {
+        "symbol": "EURJPY",
+        "name": "Euro / Japanese Yen"
+    },
+    {
+        "symbol": "GBPJPY",
+        "name": "British Pound / Japanese Yen"
+    },
+    {
+        "symbol": "USDINR",
+        "name": "US Dollar / Indian Rupee"
+    },
+    {
+        "symbol": "USDSGD",
+        "name": "US Dollar / Singapore Dollar"
+    },
+    {
+        "symbol": "USDHKD",
+        "name": "US Dollar / Hong Kong Dollar"
+    },
+    {
+        "symbol": "EURCHF",
+        "name": "Euro / Swiss Franc"
+    },
+    {
+        "symbol": "AUDCAD",
+        "name": "Australian Dollar / Canadian Dollar"
+    },
+    {
+        "symbol": "AUDNZD",
+        "name": "AUD / NZD"
+    },
+    {
+        "symbol": "AUDCHF",
+        "name": "AUD / Swiss Franc"
+    },
+    {
+        "symbol": "AUDJPY",
+        "name": "AUD / Japanese Yen"
+    },
+    {
+        "symbol": "CADJPY",
+        "name": "Canadian Dollar / Japanese Yen"
+    },
+    {
+        "symbol": "CADCHF",
+        "name": "CAD / Swiss Franc"
+    },
+    {
+        "symbol": "CHFJPY",
+        "name": "Swiss Franc / Japanese Yen"
+    },
+    {
+        "symbol": "EURAUD",
+        "name": "Euro / AUD"
+    },
+    {
+        "symbol": "EURCAD",
+        "name": "Euro / Canadian Dollar"
+    },
+    {
+        "symbol": "EURNZD",
+        "name": "Euro / NZD"
+    },
+    {
+        "symbol": "GBPAUD",
+        "name": "GBP / AUD"
+    },
+    {
+        "symbol": "GBPCAD",
+        "name": "GBP / CAD"
+    },
+    {
+        "symbol": "GBPCHF",
+        "name": "GBP / Swiss Franc"
+    },
+    {
+        "symbol": "GBPNZD",
+        "name": "GBP / NZD"
+    },
+    {
+        "symbol": "NZDJPY",
+        "name": "NZD / Japanese Yen"
+    },
+    {
+        "symbol": "NZDCAD",
+        "name": "NZD / CAD"
+    },
+    {
+        "symbol": "USDMXN",
+        "name": "USD / Mexican Peso"
+    },
+    {
+        "symbol": "USDTRY",
+        "name": "USD / Turkish Lira"
+    },
+    {
+        "symbol": "USDZAR",
+        "name": "USD / South African Rand"
+    },
+    {
+        "symbol": "USDPLN",
+        "name": "USD / Polish Zloty"
+    },
+    {
+        "symbol": "USDSEK",
+        "name": "USD / Swedish Krona"
+    },
+    {
+        "symbol": "USDNOK",
+        "name": "USD / Norwegian Krone"
+    },
+    {
+        "symbol": "USDDKK",
+        "name": "USD / Danish Krone"
+    },
+    {
+        "symbol": "USDCNH",
+        "name": "USD / Chinese Yuan Offshore"
+    },
+    {
+        "symbol": "USDTHB",
+        "name": "USD / Thai Baht"
+    },
+    {
+        "symbol": "USDKRW",
+        "name": "USD / Korean Won"
+    },
+    {
+        "symbol": "USDTWD",
+        "name": "USD / Taiwan Dollar"
+    },
+    {
+        "symbol": "USDIDR",
+        "name": "USD / Indonesian Rupiah"
+    },
+    {
+        "symbol": "USDPHP",
+        "name": "USD / Philippine Peso"
+    },
+    {
+        "symbol": "USDMYR",
+        "name": "USD / Malaysian Ringgit"
+    },
+    {
+        "symbol": "USDAED",
+        "name": "USD / UAE Dirham"
+    },
+    {
+        "symbol": "USDSAR",
+        "name": "USD / Saudi Riyal"
+    }
+]

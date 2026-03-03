@@ -14,6 +14,8 @@ interface AppContextType {
     activeModule: string;
     trades: any[];
     resetTrigger: number;
+    guardReady: boolean;
+    setGuardReady: (ready: boolean) => void;
     setActiveModule: (val: string) => void;
     addTrade: (trade: any) => void;
     updateTrade: (index: number, updates: Record<string, any>) => void;
@@ -30,6 +32,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [activeModule, setActiveModule] = useState('planner');
     const [trades, setTrades] = useState<any[]>([]);
     const [resetTrigger, setResetTrigger] = useState(0);
+    const [guardReady, setGuardReady] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -120,7 +123,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             isDarkMode, setIsDarkMode,
             activeModule, setActiveModule,
             trades, addTrade, updateTrade,
-            resetTrigger, triggerReset
+            resetTrigger, triggerReset,
+            guardReady, setGuardReady
         }}>
             {children}
         </AppContext.Provider>

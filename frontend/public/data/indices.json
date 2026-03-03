@@ -1,0 +1,238 @@
+[
+    {
+        "symbol": "SPX",
+        "name": "S&P 500 Index"
+    },
+    {
+        "symbol": "NDX",
+        "name": "NASDAQ 100 Index"
+    },
+    {
+        "symbol": "DJI",
+        "name": "Dow Jones Industrial Average"
+    },
+    {
+        "symbol": "RUT",
+        "name": "Russell 2000 Index"
+    },
+    {
+        "symbol": "VIX",
+        "name": "CBOE Volatility Index"
+    },
+    {
+        "symbol": "SOX",
+        "name": "Philadelphia Semiconductor Index"
+    },
+    {
+        "symbol": "NYA",
+        "name": "NYSE Composite"
+    },
+    {
+        "symbol": "IXIC",
+        "name": "NASDAQ Composite"
+    },
+    {
+        "symbol": "SPY",
+        "name": "SPDR S&P 500 ETF"
+    },
+    {
+        "symbol": "QQQ",
+        "name": "Invesco NASDAQ 100 ETF"
+    },
+    {
+        "symbol": "DIA",
+        "name": "SPDR Dow Jones ETF"
+    },
+    {
+        "symbol": "IWM",
+        "name": "iShares Russell 2000 ETF"
+    },
+    {
+        "symbol": "VOO",
+        "name": "Vanguard S&P 500 ETF"
+    },
+    {
+        "symbol": "VTI",
+        "name": "Vanguard Total Stock Market ETF"
+    },
+    {
+        "symbol": "ARKK",
+        "name": "ARK Innovation ETF"
+    },
+    {
+        "symbol": "XLF",
+        "name": "Financial Select SPDR"
+    },
+    {
+        "symbol": "XLK",
+        "name": "Technology Select SPDR"
+    },
+    {
+        "symbol": "XLE",
+        "name": "Energy Select SPDR"
+    },
+    {
+        "symbol": "XLV",
+        "name": "Health Care Select SPDR"
+    },
+    {
+        "symbol": "XLI",
+        "name": "Industrial Select SPDR"
+    },
+    {
+        "symbol": "NIFTY50",
+        "name": "Nifty 50 Index"
+    },
+    {
+        "symbol": "SENSEX",
+        "name": "BSE Sensex"
+    },
+    {
+        "symbol": "BANKNIFTY",
+        "name": "Nifty Bank Index"
+    },
+    {
+        "symbol": "NIFTYNEXT50",
+        "name": "Nifty Next 50"
+    },
+    {
+        "symbol": "NIFTYIT",
+        "name": "Nifty IT Index"
+    },
+    {
+        "symbol": "NIFTYPHARMA",
+        "name": "Nifty Pharma Index"
+    },
+    {
+        "symbol": "NIFTYMETAL",
+        "name": "Nifty Metal Index"
+    },
+    {
+        "symbol": "NIFTYREALTY",
+        "name": "Nifty Realty Index"
+    },
+    {
+        "symbol": "NIFTYAUTO",
+        "name": "Nifty Auto Index"
+    },
+    {
+        "symbol": "NIFTYFMCG",
+        "name": "Nifty FMCG Index"
+    },
+    {
+        "symbol": "NIFTYPSE",
+        "name": "Nifty PSE Index"
+    },
+    {
+        "symbol": "NIFTYMIDCAP",
+        "name": "Nifty Midcap 100"
+    },
+    {
+        "symbol": "NIFTYSMALLCAP",
+        "name": "Nifty Smallcap 100"
+    },
+    {
+        "symbol": "INDIA_VIX",
+        "name": "India VIX"
+    },
+    {
+        "symbol": "FTSE",
+        "name": "FTSE 100 (London)"
+    },
+    {
+        "symbol": "DAX",
+        "name": "DAX 40 (Germany)"
+    },
+    {
+        "symbol": "CAC",
+        "name": "CAC 40 (France)"
+    },
+    {
+        "symbol": "STOXX50",
+        "name": "Euro Stoxx 50"
+    },
+    {
+        "symbol": "IBEX",
+        "name": "IBEX 35 (Spain)"
+    },
+    {
+        "symbol": "SMI",
+        "name": "SMI (Switzerland)"
+    },
+    {
+        "symbol": "N225",
+        "name": "Nikkei 225 (Japan)"
+    },
+    {
+        "symbol": "HSI",
+        "name": "Hang Seng (Hong Kong)"
+    },
+    {
+        "symbol": "SSE",
+        "name": "Shanghai Composite (China)"
+    },
+    {
+        "symbol": "SZSE",
+        "name": "Shenzhen Composite"
+    },
+    {
+        "symbol": "KOSPI",
+        "name": "KOSPI (South Korea)"
+    },
+    {
+        "symbol": "TWSE",
+        "name": "TAIEX (Taiwan)"
+    },
+    {
+        "symbol": "ASX200",
+        "name": "ASX 200 (Australia)"
+    },
+    {
+        "symbol": "NZX50",
+        "name": "NZX 50 (New Zealand)"
+    },
+    {
+        "symbol": "TSX",
+        "name": "TSX Composite (Canada)"
+    },
+    {
+        "symbol": "BOVESPA",
+        "name": "Bovespa (Brazil)"
+    },
+    {
+        "symbol": "MERVAL",
+        "name": "Merval (Argentina)"
+    },
+    {
+        "symbol": "MOEX",
+        "name": "MOEX Russia Index"
+    },
+    {
+        "symbol": "JSE",
+        "name": "JSE Top 40 (South Africa)"
+    },
+    {
+        "symbol": "TADAWUL",
+        "name": "Tadawul All Share (Saudi)"
+    },
+    {
+        "symbol": "KLCI",
+        "name": "KLCI (Malaysia)"
+    },
+    {
+        "symbol": "STI",
+        "name": "Straits Times (Singapore)"
+    },
+    {
+        "symbol": "SET",
+        "name": "SET Index (Thailand)"
+    },
+    {
+        "symbol": "PSEi",
+        "name": "PSEi (Philippines)"
+    },
+    {
+        "symbol": "JCI",
+        "name": "Jakarta Composite (Indonesia)"
+    }
+]

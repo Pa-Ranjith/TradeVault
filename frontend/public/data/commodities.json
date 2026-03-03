@@ -1,0 +1,142 @@
+[
+    {
+        "symbol": "XAUUSD",
+        "name": "Gold Spot / USD"
+    },
+    {
+        "symbol": "XAGUSD",
+        "name": "Silver Spot / USD"
+    },
+    {
+        "symbol": "XPTUSD",
+        "name": "Platinum Spot / USD"
+    },
+    {
+        "symbol": "XPDUSD",
+        "name": "Palladium Spot / USD"
+    },
+    {
+        "symbol": "COPPER",
+        "name": "Copper Futures"
+    },
+    {
+        "symbol": "ZINC",
+        "name": "Zinc Futures"
+    },
+    {
+        "symbol": "NICKEL",
+        "name": "Nickel Futures"
+    },
+    {
+        "symbol": "ALUMINIUM",
+        "name": "Aluminium Futures"
+    },
+    {
+        "symbol": "LEAD",
+        "name": "Lead Futures"
+    },
+    {
+        "symbol": "TIN",
+        "name": "Tin Futures"
+    },
+    {
+        "symbol": "CRUDEOIL",
+        "name": "WTI Crude Oil"
+    },
+    {
+        "symbol": "BRENT",
+        "name": "Brent Crude Oil"
+    },
+    {
+        "symbol": "NATURALGAS",
+        "name": "Natural Gas"
+    },
+    {
+        "symbol": "RBOB",
+        "name": "Gasoline (RBOB)"
+    },
+    {
+        "symbol": "HEATINGOIL",
+        "name": "Heating Oil"
+    },
+    {
+        "symbol": "WHEAT",
+        "name": "Wheat Futures"
+    },
+    {
+        "symbol": "CORN",
+        "name": "Corn Futures"
+    },
+    {
+        "symbol": "SOYBEANS",
+        "name": "Soybean Futures"
+    },
+    {
+        "symbol": "COTTON",
+        "name": "Cotton Futures"
+    },
+    {
+        "symbol": "SUGAR",
+        "name": "Sugar Futures"
+    },
+    {
+        "symbol": "COFFEE",
+        "name": "Coffee Futures"
+    },
+    {
+        "symbol": "COCOA",
+        "name": "Cocoa Futures"
+    },
+    {
+        "symbol": "RICE",
+        "name": "Rice Futures"
+    },
+    {
+        "symbol": "OATS",
+        "name": "Oats Futures"
+    },
+    {
+        "symbol": "LUMBER",
+        "name": "Lumber Futures"
+    },
+    {
+        "symbol": "LIVECATTLE",
+        "name": "Live Cattle"
+    },
+    {
+        "symbol": "LEANHOGS",
+        "name": "Lean Hogs"
+    },
+    {
+        "symbol": "FEEDERCATTLE",
+        "name": "Feeder Cattle"
+    },
+    {
+        "symbol": "IRONORE",
+        "name": "Iron Ore"
+    },
+    {
+        "symbol": "STEEL",
+        "name": "Steel Rebar"
+    },
+    {
+        "symbol": "URANIUM",
+        "name": "Uranium Spot"
+    },
+    {
+        "symbol": "LITHIUM",
+        "name": "Lithium Carbonate"
+    },
+    {
+        "symbol": "COBALT",
+        "name": "Cobalt Spot"
+    },
+    {
+        "symbol": "RUBBER",
+        "name": "Rubber Futures"
+    },
+    {
+        "symbol": "PALM",
+        "name": "Palm Oil Futures"
+    }
+]

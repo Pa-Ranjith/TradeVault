@@ -27,7 +27,7 @@ import { useApp } from "@/context/AppContext";
 import { MarketService } from "@/services/MarketService";
 
 export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }) {
-    const [market, setMarket] = useState("NSE");
+    const [market, setMarket] = useState("INDIAN_EQUITIES");
     const [segment, setSegment] = useState("NSE_EQ");
     const [product, setProduct] = useState("INTRADAY");
     const [direction, setDirection] = useState("LONG");
@@ -56,98 +56,83 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
     const [isFetchingPrice, setIsFetchingPrice] = useState(false);
     const [priceSource, setPriceSource] = useState<string>("");
 
-    const { currency, setCurrency, triggerReset } = useApp();
+    const { currency, setCurrency, triggerReset, guardReady } = useApp();
 
+    // Market data stores — loaded from JSON files
+    const [indianStocks, setIndianStocks] = useState<any[]>([]);
+    const [usStocks, setUsStocks] = useState<any[]>([]);
+    const [cryptoList, setCryptoList] = useState<any[]>([]);
+    const [forexList, setForexList] = useState<any[]>([]);
+    const [commoditiesList, setCommoditiesList] = useState<any[]>([]);
+    const [indicesList, setIndicesList] = useState<any[]>([]);
+
+    // Load all market data on mount
     useEffect(() => {
-        fetch('/data/equities.json')
-            .then(res => res.json())
-            .then(data => setStocks(data))
-            .catch(err => console.error("Failed to load symbols:", err));
+        const loadJson = (url: string, setter: (d: any[]) => void) =>
+            fetch(url).then(r => r.json()).then(setter).catch(e => console.error(`Failed to load ${url}:`, e));
+
+        loadJson('/data/equities.json', setIndianStocks);
+        loadJson('/data/us_equities.json', setUsStocks);
+        loadJson('/data/crypto.json', setCryptoList);
+        loadJson('/data/forex.json', setForexList);
+        loadJson('/data/commodities.json', setCommoditiesList);
+        loadJson('/data/indices.json', setIndicesList);
     }, []);
 
+    // Unified search filter across all markets
     useEffect(() => {
         if (symbol.length > 0) {
-            let filtered = [];
+            let filtered: any[] = [];
+            const q = symbol.toLowerCase();
+            const matchFn = (s: any) => s.symbol.toLowerCase().includes(q) || s.name.toLowerCase().includes(q);
 
             if (market === "INDIAN_EQUITIES") {
-                filtered = stocks.filter(s =>
-                    (s.symbol.toLowerCase().includes(symbol.toLowerCase()) || s.name.toLowerCase().includes(symbol.toLowerCase())) &&
-                    !s.symbol.includes("US:")
-                );
+                const matches = indianStocks.filter(s => matchFn(s) && !s.symbol.includes("US:"));
+                filtered = matches.flatMap(s => [
+                    { symbol: s.symbol, name: s.name, exchange: 'NSE' },
+                    { symbol: s.symbol, name: s.name, exchange: 'BSE' }
+                ]);
             } else if (market === "US_EQ") {
-                const usStocks = [
-                    { symbol: "AAPL", name: "Apple Inc." },
-                    { symbol: "GOOGL", name: "Alphabet Inc." },
-                    { symbol: "MSFT", name: "Microsoft Corporation" },
-                    { symbol: "TSLA", name: "Tesla, Inc." },
-                    { symbol: "NVDA", name: "NVIDIA Corporation" },
-                    { symbol: "AMZN", name: "Amazon.com, Inc." },
-                    { symbol: "META", name: "Meta Platforms, Inc." },
-                    { symbol: "NFLX", name: "Netflix, Inc." }
-                ];
-                filtered = usStocks.filter(s =>
-                    s.symbol.toLowerCase().includes(symbol.toLowerCase()) ||
-                    s.name.toLowerCase().includes(symbol.toLowerCase())
-                );
+                filtered = usStocks.filter(matchFn).map(s => ({ ...s, exchange: 'NYSE/NAS' }));
             } else if (market === "COMMODITIES") {
-                const commodities = [
-                    { symbol: "XAUUSD", name: "Gold Spot / US Dollar" },
-                    { symbol: "XAGUSD", name: "Silver Spot / US Dollar" },
-                    { symbol: "COPPER", name: "Copper Spot" },
-                    { symbol: "ZINC", name: "Zinc Spot" },
-                    { symbol: "CRUDEOIL", name: "WTI Crude Oil" },
-                    { symbol: "NATURALGAS", name: "Natural Gas Spot" }
-                ];
-                filtered = commodities.filter(c =>
-                    c.symbol.toLowerCase().includes(symbol.toLowerCase()) ||
-                    c.name.toLowerCase().includes(symbol.toLowerCase())
-                );
+                filtered = commoditiesList.filter(matchFn).map(s => ({ ...s, exchange: 'GLOBAL' }));
             } else if (market === "FOREX") {
-                const forex = [
-                    { symbol: "EURUSD", name: "Euro / US Dollar" },
-                    { symbol: "GBPUSD", name: "British Pound / US Dollar" },
-                    { symbol: "USDJPY", name: "US Dollar / Japanese Yen" },
-                    { symbol: "AUDUSD", name: "Australian Dollar / US Dollar" },
-                    { symbol: "USDCAD", name: "US Dollar / Canadian Dollar" }
-                ];
-                filtered = forex.filter(f =>
-                    f.symbol.toLowerCase().includes(symbol.toLowerCase()) ||
-                    f.name.toLowerCase().includes(symbol.toLowerCase())
-                );
+                filtered = forexList.filter(matchFn).map(s => ({ ...s, exchange: 'OANDA' }));
             } else if (market === "CRYPTO") {
-                const cryptos = [
-                    { symbol: "BTC", name: "Bitcoin" },
-                    { symbol: "ETH", name: "Ethereum" },
-                    { symbol: "SOL", name: "Solana" }
-                ];
-                filtered = cryptos.filter(c => c.symbol.toLowerCase().includes(symbol.toLowerCase()));
+                filtered = cryptoList.filter(matchFn).map(s => ({ ...s, exchange: 'BINANCE' }));
+            } else if (market === "INDICES") {
+                filtered = indicesList.filter(matchFn).map(s => ({ ...s, exchange: 'INDEX' }));
             }
 
-            setFilteredStocks(filtered.slice(0, 10));
+            setFilteredStocks(filtered.slice(0, 15));
             setShowDropdown(filtered.length > 0);
         } else {
             setShowDropdown(false);
         }
-    }, [symbol, stocks, market]);
+    }, [symbol, indianStocks, usStocks, cryptoList, forexList, commoditiesList, indicesList, market]);
 
     // Market Switch Reset & Currency Sync
     useEffect(() => {
         if (market) {
-            console.log(`[PositionSizer] Market switched to ${market}. Syncing currency...`);
-
             // Sync Global Currency
-            if (market === "US_EQ" || market === "CRYPTO" || market === "FOREX" || market === "COMMODITIES") {
+            if (market === "US_EQ" || market === "CRYPTO" || market === "FOREX" || market === "COMMODITIES" || market === "INDICES") {
                 setCurrency("$");
             } else {
                 setCurrency("₹");
             }
 
+            // Full reset on market switch
             setSymbol("");
             setQty("");
             setEntry("");
             setSl("");
             setTarget("");
             setNetProfit(0);
+            setSelectedTags([]);
+            setPriceSource("");
+            setHighlightedIdx(-1);
+            setShowDropdown(false);
+            setShowTagDropdown(false);
             triggerReset();
         }
     }, [market]);
@@ -255,6 +240,7 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                         <option value="CRYPTO">Crypto (USD)</option>
                         <option value="FOREX">Forex</option>
                         <option value="COMMODITIES">Commodities</option>
+                        <option value="INDICES">Indices (Global)</option>
                     </select>
                 </div>
                 <div className="col-span-3 flex flex-col gap-2">
@@ -329,7 +315,7 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                                             <span className="text-[10px] text-text-muted">{s.name}</span>
                                         </div>
                                         <span className="text-[10px] bg-cta/10 text-cta px-2 py-0.5 rounded font-bold">
-                                            {market === "INDIAN_EQUITIES" ? "NSE" :
+                                            {s.exchange ? s.exchange :
                                                 market === "US_EQ" ? "NASDAQ" :
                                                     market === "COMMODITIES" ? "GLOBAL" :
                                                         market === "FOREX" ? "OANDA" : market}
@@ -446,8 +432,8 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
 
             <button
                 onClick={() => { setShowTagDropdown(false); onExecute && onExecute({ symbol, qty, entry, sl, target, market, direction, netProfit, tags: selectedTags }); }}
-                disabled={!symbol || !qty || !entry}
-                className="w-full max-w-md mx-auto h-14 bg-cta hover:bg-cta-hover text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!symbol || !qty || !entry || !guardReady}
+                className="w-full max-w-md mx-auto h-14 bg-cta hover:bg-cta-hover text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
                 Execute Trade
             </button>
