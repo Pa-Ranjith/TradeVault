@@ -53,19 +53,22 @@ export default function Home() {
                 return <Settings />;
               default:
                 return (
-                  <div className="flex gap-8 pb-12 items-stretch" style={{ minHeight: 0 }}>
-                    {/* Left Column — Height strictly constrained by the right column */}
-                    <div className="w-[35%] flex flex-col gap-6 min-h-0" style={{ maxHeight: '100%' }}>
-                      <div className="shrink-0">
-                        <PreTradeGuard />
-                      </div>
-                      <div className="flex-1 min-h-0 overflow-hidden">
-                        <NewsTerminal />
+                  <div className="grid grid-cols-[35%_65%] gap-8 pb-12 min-h-0">
+                    {/* Left Column Container — Defines the cell space */}
+                    <div className="relative min-h-0">
+                      {/* Fixed height wrapper — Strictly bound to the right column's height */}
+                      <div className="absolute inset-0 flex flex-col gap-6">
+                        <div className="shrink-0">
+                          <PreTradeGuard />
+                        </div>
+                        <div className="flex-1 min-h-0">
+                          <NewsTerminal />
+                        </div>
                       </div>
                     </div>
 
-                    {/* Right Column — The Height Anchor */}
-                    <div className="w-[65%] flex flex-col min-h-0">
+                    {/* Right Column — Master Height Anchor */}
+                    <div className="flex flex-col min-h-0">
                       <PositionSizer onExecute={handleExecuteTrade} />
                     </div>
                   </div>
