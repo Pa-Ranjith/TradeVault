@@ -14,6 +14,8 @@ export function Sidebar() {
     const navItems = [
         { id: 'planner', icon: LayoutDashboard, label: 'Planner' },
         { id: 'positions', icon: Activity, label: 'Live Positions', badge: openPositions > 0 ? openPositions : null },
+        { id: 'portfolio', icon: BarChart2, label: 'Portfolio' },
+        { id: 'sentinel', icon: TrendingUp, label: 'Pulse Sentinel' },
         { id: 'journal', icon: BookOpen, label: 'Journal' },
         { id: 'analytics', icon: BarChart2, label: 'Analytics' },
         { id: 'settings', icon: Settings, label: 'Settings' },

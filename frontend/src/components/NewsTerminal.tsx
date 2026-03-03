@@ -62,7 +62,9 @@ export function NewsTerminal() {
                 <div className="flex items-center gap-1.5">
                     <span className="text-sm text-text-muted flex items-center gap-1.5 font-bold">
                         <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''} text-cta`} />
-                        {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        <time suppressHydrationWarning>
+                            {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </time>
                     </span>
                     <div className="bg-danger/15 text-danger border border-danger/30 px-3.5 py-1.5 rounded-lg text-sm font-black tracking-[0.3em] animate-pulse">LIVE FEED</div>
                 </div>

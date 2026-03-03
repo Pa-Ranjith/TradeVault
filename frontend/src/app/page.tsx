@@ -11,6 +11,8 @@ import { LivePositions } from "@/components/LivePositions";
 import { Journal } from "@/components/Journal";
 import { Analytics } from "@/components/Analytics";
 import { Settings } from "@/components/Settings";
+import { Portfolio } from "@/components/Portfolio";
+import { PulseSentinel } from "@/components/PulseSentinel";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
@@ -49,11 +51,15 @@ export default function Home() {
                 return <Journal />;
               case 'analytics':
                 return <Analytics />;
+              case 'portfolio':
+                return <Portfolio />;
+              case 'sentinel':
+                return <PulseSentinel />;
               case 'settings':
                 return <Settings />;
               default:
                 return (
-                  <div className="grid grid-cols-[35%_65%] gap-8 pb-12 min-h-0">
+                  <div className="grid grid-cols-[35%_65%] gap-8 pb-8 min-h-0">
                     {/* Left Column Container — Defines the cell space */}
                     <div className="relative min-h-0">
                       {/* Fixed height wrapper — Strictly bound to the right column's height */}
@@ -85,7 +91,7 @@ export default function Home() {
       <Sidebar />
 
       {/* Main Workspace */}
-      <main className="flex-1 overflow-y-auto p-12 bg-bg-main relative">
+      <main className="flex-1 overflow-y-auto px-12 py-8 bg-bg-main relative">
         <header className="mb-10 flex justify-between items-start">
           <div>
             <h1 className="font-outfit text-4xl font-bold text-text-main mb-2">Plan Execution</h1>
@@ -94,7 +100,7 @@ export default function Home() {
 
           <div className="flex items-center gap-4">
             {/* V1 Restored Components */}
-            <DailyLimitDropdown />
+            {(activeModule === 'planner' || activeModule === 'settings') && <DailyLimitDropdown />}
 
             <button
               onClick={toggleDarkMode}

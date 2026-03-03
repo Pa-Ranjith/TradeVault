@@ -94,28 +94,21 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                 ]);
             } else if (market === "US_EQ") {
                 filtered = usStocks.filter(matchFn).map(s => ({ ...s, exchange: 'NYSE/NAS' }));
-            } else if (market === "COMMODITIES") {
-                filtered = commoditiesList.filter(matchFn).map(s => ({ ...s, exchange: 'GLOBAL' }));
-            } else if (market === "FOREX") {
-                filtered = forexList.filter(matchFn).map(s => ({ ...s, exchange: 'OANDA' }));
-            } else if (market === "CRYPTO") {
-                filtered = cryptoList.filter(matchFn).map(s => ({ ...s, exchange: 'BINANCE' }));
-            } else if (market === "INDICES") {
-                filtered = indicesList.filter(matchFn).map(s => ({ ...s, exchange: 'INDEX' }));
             }
 
             setFilteredStocks(filtered.slice(0, 15));
             setShowDropdown(filtered.length > 0);
         } else {
+            setFilteredStocks([]);
             setShowDropdown(false);
         }
-    }, [symbol, indianStocks, usStocks, cryptoList, forexList, commoditiesList, indicesList, market]);
+    }, [symbol, indianStocks, usStocks, market]);
 
     // Market Switch Reset & Currency Sync
     useEffect(() => {
         if (market) {
             // Sync Global Currency
-            if (market === "US_EQ" || market === "CRYPTO" || market === "FOREX" || market === "COMMODITIES" || market === "INDICES") {
+            if (market === "US_EQ") {
                 setCurrency("$");
             } else {
                 setCurrency("₹");
@@ -137,19 +130,24 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
         }
     }, [market]);
 
-    // Auto-fetch price when symbol is selected
+    // Auto-fetch price when symbol is selected (debounced)
     useEffect(() => {
-        if (symbol && symbol.length > 2) {
-            handleFetchPrice();
-        }
+        const handler = setTimeout(() => {
+            if (symbol && symbol.length >= 2) {
+                handleFetchPrice();
+            }
+        }, 400); // 400ms debounce
+        return () => clearTimeout(handler);
     }, [symbol]);
 
-    const handleFetchPrice = async () => {
+    const handleFetchPrice = async (overrideSymbol?: string) => {
+        const symbolToFetch = overrideSymbol || symbol;
+        if (!symbolToFetch || symbolToFetch.length < 2) return;
+
         setIsFetchingPrice(true);
         try {
-            // Normalize market for service
             const serviceMarket = market === "INDIAN_EQUITIES" ? "NSE" : market;
-            const result = await MarketService.fetchPrice(symbol, serviceMarket);
+            const result = await MarketService.fetchPrice(symbolToFetch, serviceMarket);
             if (result) {
                 setEntry(result.price);
                 setPriceSource(result.provider);
@@ -237,10 +235,6 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                     <select value={market} onChange={e => setMarket(e.target.value)} className="p-3 bg-bg-main border border-transparent focus:border-cta rounded-xl outline-none transition-all">
                         <option value="INDIAN_EQUITIES">Indian Equities (NSE/BSE)</option>
                         <option value="US_EQ">US Stocks (NYSE/NAS)</option>
-                        <option value="CRYPTO">Crypto (USD)</option>
-                        <option value="FOREX">Forex</option>
-                        <option value="COMMODITIES">Commodities</option>
-                        <option value="INDICES">Indices (Global)</option>
                     </select>
                 </div>
                 <div className="col-span-3 flex flex-col gap-2">
@@ -285,9 +279,11 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                                     setHighlightedIdx(prev => Math.max(prev - 1, 0));
                                 } else if (e.key === 'Enter' && highlightedIdx >= 0) {
                                     e.preventDefault();
-                                    setSymbol(filteredStocks[highlightedIdx].symbol);
+                                    const selected = filteredStocks[highlightedIdx].symbol;
+                                    setSymbol(selected);
                                     setShowDropdown(false);
                                     setHighlightedIdx(-1);
+                                    handleFetchPrice(selected); // Instant local fetch
                                 } else if (e.key === 'Escape') {
                                     setShowDropdown(false);
                                     setHighlightedIdx(-1);
@@ -302,10 +298,12 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                                 {filteredStocks.map((s, idx) => (
                                     <div
                                         key={idx}
-                                        onClick={() => {
+                                        onMouseDown={(e) => {
+                                            e.preventDefault();
                                             setSymbol(s.symbol);
                                             setShowDropdown(false);
                                             setHighlightedIdx(-1);
+                                            handleFetchPrice(s.symbol); // Instant local fetch
                                         }}
                                         className={`p-3 cursor-pointer flex justify-between items-center border-b border-border-soft/30 last:border-0 transition-colors
                                             ${idx === highlightedIdx ? 'bg-cta/10 border-l-2 border-l-cta' : 'hover:bg-bg-main'}`}

@@ -16,7 +16,7 @@ const priceCache: Record<string, PriceResult> = {};
 export const MarketService = {
     /**
      * Fetches price via our server-side proxy with built-in failsafe.
-     * Chain: Yahoo Finance → Binance/Finnhub → CoinGecko
+     * Equity Focused Chain: Yahoo Finance (India/US) → Finnhub → AlphaVantage
      */
     async fetchPrice(symbol: string, market: string): Promise<PriceResult | null> {
         const cacheKey = `${market}:${symbol}`;
