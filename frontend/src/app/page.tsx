@@ -53,17 +53,17 @@ export default function Home() {
                 return <Settings />;
               default:
                 return (
-                  <div className="flex gap-8 pb-8" style={{ alignItems: 'stretch' }}>
-                    {/* Left Column (35%) — stretches to match right column */}
-                    <div className="w-[35%] flex flex-col gap-8" style={{ minHeight: 0 }}>
+                  <div className="grid grid-cols-[35%_1fr] gap-8 pb-8" style={{ gridTemplateRows: '1fr', maxHeight: 'calc(100vh - 220px)' }}>
+                    {/* Left Column — locked to right column height */}
+                    <div className="flex flex-col gap-6 min-h-0 overflow-hidden">
                       <PreTradeGuard />
                       <div className="flex-1 min-h-0 overflow-hidden">
                         <NewsTerminal />
                       </div>
                     </div>
 
-                    {/* Right Column (65%) */}
-                    <div className="w-[65%] flex flex-col">
+                    {/* Right Column */}
+                    <div className="flex flex-col min-h-0">
                       <PositionSizer onExecute={handleExecuteTrade} />
                     </div>
                   </div>
