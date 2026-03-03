@@ -49,24 +49,24 @@ export function PreTradeGuard() {
     }, [resetTrigger]);
 
     return (
-        <div className="bg-bg-panel border border-border-soft rounded-2xl p-8 shadow-soft flex flex-col transition-all overflow-hidden relative">
-            <div className="mb-6">
-                <h2 className="text-xl font-semibold flex items-center gap-3 text-text-main mb-2">
-                    <Shield className="w-5 h-5 text-cta" /> Pre-Trade Guard
+        <div className="bg-bg-panel border border-border-soft rounded-2xl p-5 shadow-soft flex flex-col transition-all overflow-hidden relative">
+            <div className="mb-3">
+                <h2 className="text-base font-semibold flex items-center gap-2 text-text-main mb-1">
+                    <Shield className="w-4 h-4 text-cta" /> Pre-Trade Guard
                 </h2>
-                <p className="text-sm text-text-muted">Complete both sections to unlock execution.</p>
+                <p className="text-xs text-text-muted">Complete both sections to unlock execution.</p>
             </div>
 
-            <div className="flex gap-2 bg-black/5 dark:bg-black/20 p-2 rounded-xl mb-6">
+            <div className="flex gap-2 bg-black/5 dark:bg-black/20 p-1.5 rounded-xl mb-4">
                 <button
                     onClick={() => setActiveTab("analysis")}
-                    className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === "analysis" ? "bg-bg-panel text-text-main shadow-sm" : "text-text-muted hover:text-text-main"}`}
+                    className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-all ${activeTab === "analysis" ? "bg-bg-panel text-text-main shadow-sm" : "text-text-muted hover:text-text-main"}`}
                 >
                     📊 Analysis
                 </button>
                 <button
                     onClick={() => setActiveTab("psychology")}
-                    className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === "psychology" ? "bg-bg-panel text-text-main shadow-sm" : "text-text-muted hover:text-text-main"}`}
+                    className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-all ${activeTab === "psychology" ? "bg-bg-panel text-text-main shadow-sm" : "text-text-muted hover:text-text-main"}`}
                 >
                     🧠 Psychology
                 </button>
@@ -74,7 +74,7 @@ export function PreTradeGuard() {
 
             {activeTab === "analysis" && (
                 <div className="flex flex-col animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                    <div className="flex gap-2 mb-3 overflow-x-auto">
                         {[
                             { id: "fundamentals", icon: PieChart, label: "Core" },
                             { id: "technicals", icon: Activity, label: "Techs" },
@@ -92,7 +92,7 @@ export function PreTradeGuard() {
                         ))}
                     </div>
 
-                    <div className="bg-bg-main/50 p-6 rounded-xl border border-border-soft min-h-[180px]">
+                    <div className="bg-bg-main/50 p-4 rounded-xl border border-border-soft min-h-[120px]">
                         {activeRatTab === "fundamentals" && (
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Fundamental Catalyst</label>
