@@ -22,14 +22,17 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  --font-outfit: var(--font-outfit);
+  --font-dmsans: var(--font-dmsans);
 }
 
 @layer base {
   :root {
     --bg-main: #FFF5F5;
     --bg-panel: #FFFFFF;
-    --text-main: #2D3436;
-    --text-muted: #636E72;
+    --text-main: #1a1a2e;
+    --text-muted: #6b7280;
     --primary: #E8B4B8;
     --secondary: #A8D5BA;
     --cta: #D4AF37;
@@ -60,7 +63,34 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-dmsans), 'DM Sans', system-ui, -apple-system, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Scrollbar styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+}
+
+/* Heading font utility */
+.font-outfit {
+  font-family: var(--font-outfit), 'Outfit', system-ui, sans-serif;
+}
+
+.font-dmsans {
+  font-family: var(--font-dmsans), 'DM Sans', system-ui, sans-serif;
 }

@@ -16,6 +16,7 @@ interface AppContextType {
     resetTrigger: number;
     setActiveModule: (val: string) => void;
     addTrade: (trade: any) => void;
+    updateTrade: (index: number, updates: Record<string, any>) => void;
     triggerReset: () => void;
 }
 
@@ -107,6 +108,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setTrades(prev => [trade, ...prev]);
     };
 
+    const updateTrade = (index: number, updates: Record<string, any>) => {
+        setTrades(prev => prev.map((t, i) => i === index ? { ...t, ...updates } : t));
+    };
+
     return (
         <AppContext.Provider value={{
             currency, setCurrency,
@@ -114,7 +119,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             capital, setCapital,
             isDarkMode, setIsDarkMode,
             activeModule, setActiveModule,
-            trades, addTrade,
+            trades, addTrade, updateTrade,
             resetTrigger, triggerReset
         }}>
             {children}

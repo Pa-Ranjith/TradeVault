@@ -1,6 +1,7 @@
 /**
- * Failsafe Market Service
- * Implements multiple API fallbacks for real-time price fetching.
+ * Failsafe Market Service v2
+ * Uses the Next.js API route (/api/price) as a server-side proxy.
+ * This avoids CORS issues and provides a multi-provider failsafe chain.
  */
 
 interface PriceResult {
@@ -14,86 +15,43 @@ const priceCache: Record<string, PriceResult> = {};
 
 export const MarketService = {
     /**
-     * Fetches price with multiple fallbacks
+     * Fetches price via our server-side proxy with built-in failsafe.
+     * Chain: Yahoo Finance → Binance/Finnhub → CoinGecko
      */
     async fetchPrice(symbol: string, market: string): Promise<PriceResult | null> {
         const cacheKey = `${market}:${symbol}`;
 
-        // Check cache
+        // Check cache first (1 minute TTL)
         if (priceCache[cacheKey] && (Date.now() - priceCache[cacheKey].timestamp < CACHE_DURATION)) {
-            console.log(`[MarketService] Using cached price for ${symbol}`);
+            console.log(`[MarketService] Cache hit for ${symbol}`);
             return priceCache[cacheKey];
         }
 
-        const providers = this.getProviders(market, symbol);
+        try {
+            console.log(`[MarketService] Fetching price for ${symbol} (${market})...`);
+            const res = await fetch(`/api/price?symbol=${encodeURIComponent(symbol)}&market=${encodeURIComponent(market)}`);
 
-        for (const provider of providers) {
-            try {
-                console.log(`[MarketService] Trying provider: ${provider.name} for ${symbol}`);
-                const price = await provider.fetcher();
-                if (price && price > 0) {
-                    const result = { price, provider: provider.name, timestamp: Date.now() };
-                    priceCache[cacheKey] = result;
-                    return result;
-                }
-            } catch (err) {
-                console.warn(`[MarketService] Provider ${provider.name} failed:`, err);
+            if (!res.ok) {
+                console.warn(`[MarketService] API returned ${res.status} for ${symbol}`);
+                return null;
             }
+
+            const data = await res.json();
+
+            if (data.price && data.price > 0) {
+                const result: PriceResult = {
+                    price: data.price,
+                    provider: data.provider,
+                    timestamp: Date.now()
+                };
+                priceCache[cacheKey] = result;
+                console.log(`[MarketService] ✅ ${data.provider}: ${symbol} = ${data.price}`);
+                return result;
+            }
+        } catch (err) {
+            console.error(`[MarketService] Failed to fetch ${symbol}:`, err);
         }
 
         return null;
-    },
-
-    getProviders(market: string, symbol: string) {
-        const providers = [
-            // 1. Finnhub (Best for US/Global)
-            {
-                name: "Finnhub",
-                fetcher: async () => {
-                    const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=sandbox_c8lsv2aad3i8dq4q8v0g`);
-                    const data = await res.json();
-                    return data.c;
-                }
-            },
-            // 2. Alpha Vantage (Forex/US)
-            {
-                name: "AlphaVantage",
-                fetcher: async () => {
-                    const res = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=demo`);
-                    const data = await res.json();
-                    return parseFloat(data["Global Quote"]?.["05. price"]);
-                }
-            },
-            // 3. Binance Public API (Crypto)
-            {
-                name: "Binance",
-                fetcher: async () => {
-                    if (market !== "CRYPTO") return null;
-                    const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
-                    const data = await res.json();
-                    return parseFloat(data.price);
-                }
-            },
-            // 4. CryptoWatch (Crypto)
-            {
-                name: "CryptoWatch",
-                fetcher: async () => {
-                    if (market !== "CRYPTO") return null;
-                    const res = await fetch(`https://api.cryptowat.ch/markets/binance/${symbol.toLowerCase()}usdt/price`);
-                    const data = await res.json();
-                    return data.result.price;
-                }
-            },
-            // 5. Polygon.io Mock/Fallback
-            {
-                name: "Polygon.io",
-                fetcher: async () => {
-                    // Placeholder for real logic
-                    return null;
-                }
-            }
-        ];
-
-        return providers;
     }
 };

@@ -24,7 +24,7 @@ export function Sidebar() {
             {/* Logo Section */}
             <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
                 {!isCollapsed && (
-                    <div className="flex items-center gap-3 font-cormorant text-2xl font-bold text-text-main">
+                    <div className="flex items-center gap-3 font-outfit text-2xl font-bold text-text-main">
                         <Image src="/logo.png" alt="TradeVault Logo" width={32} height={32} className="rounded-lg shadow-lg" />
                         <span>TradeVault</span>
                     </div>
@@ -93,7 +93,7 @@ export function Sidebar() {
                     {!isCollapsed && (
                         <div className="flex flex-col">
                             <span className="text-[10px] uppercase font-bold text-text-muted tracking-wider opacity-60">Trading Capital</span>
-                            <span className="text-lg font-bold text-text-main font-inter tabular-nums">
+                            <span className="text-lg font-bold text-text-main font-dmsans tabular-nums">
                                 {currency}{capital?.toLocaleString(currency === '₹' ? 'en-IN' : 'en-US')}
                             </span>
                         </div>

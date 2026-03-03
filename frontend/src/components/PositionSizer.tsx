@@ -1,7 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Target, Search, RefreshCw } from "lucide-react";
+import { Target, Search, RefreshCw, Tag } from "lucide-react";
+
+const TRADE_TAGS = [
+    { id: "rate_hike", label: "#InterestRateHike" },
+    { id: "rate_cut", label: "#RateCut" },
+    { id: "earnings", label: "#EarningsSeason" },
+    { id: "geopolitical", label: "#Geopolitical" },
+    { id: "inflation", label: "#InflationData" },
+    { id: "gdp", label: "#GDPReport" },
+    { id: "breakout", label: "#Breakout" },
+    { id: "momentum", label: "#Momentum" },
+    { id: "reversal", label: "#Reversal" },
+    { id: "support_resistance", label: "#SupportResistance" },
+    { id: "news_driven", label: "#NewsDriven" },
+    { id: "sector_rotation", label: "#SectorRotation" },
+    { id: "fii_dii", label: "#FII_DII_Flow" },
+    { id: "budget", label: "#BudgetImpact" },
+    { id: "global_cues", label: "#GlobalCues" },
+    { id: "scalp", label: "#Scalp" },
+    { id: "swing", label: "#SwingTrade" },
+    { id: "pattern", label: "#ChartPattern" }
+];
 import { useApp } from "@/context/AppContext";
 import { MarketService } from "@/services/MarketService";
 
@@ -16,6 +37,12 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
     const [sl, setSl] = useState<number | "">("");
     const [target, setTarget] = useState<number | "">("");
     const [lotSize, setLotSize] = useState<number>(1);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [showTagDropdown, setShowTagDropdown] = useState(false);
+
+    const toggleTag = (tagId: string) => {
+        setSelectedTags(prev => prev.includes(tagId) ? prev.filter(t => t !== tagId) : [...prev, tagId]);
+    };
 
     const [margin, setMargin] = useState(0);
     const [risk, setRisk] = useState(0);
@@ -25,9 +52,9 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
     const [stocks, setStocks] = useState<any[]>([]);
     const [filteredStocks, setFilteredStocks] = useState<any[]>([]);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [highlightedIdx, setHighlightedIdx] = useState<number>(-1);
     const [isFetchingPrice, setIsFetchingPrice] = useState(false);
     const [priceSource, setPriceSource] = useState<string>("");
-    const [priceFreshness, setPriceFreshness] = useState<"LIVE" | "DELAYED" | "IDLE">("IDLE");
 
     const { currency, setCurrency, triggerReset } = useApp();
 
@@ -121,7 +148,6 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
             setSl("");
             setTarget("");
             setNetProfit(0);
-            setPriceFreshness("IDLE");
             triggerReset();
         }
     }, [market]);
@@ -141,12 +167,10 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
             const result = await MarketService.fetchPrice(symbol, serviceMarket);
             if (result) {
                 setEntry(result.price);
-                // If the provider specifically indicates it's a live fetch, mark it LIVE
-                setPriceFreshness(result.provider === "Binance" || result.provider === "Finnhub" ? "LIVE" : "DELAYED");
+                setPriceSource(result.provider);
             }
         } catch (err) {
             console.error("Fetch price failed", err);
-            setPriceFreshness("IDLE");
         } finally {
             setIsFetchingPrice(false);
         }
@@ -263,8 +287,26 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                             type="text"
                             placeholder="Search for a stock..."
                             value={symbol}
-                            onChange={e => setSymbol(e.target.value)}
+                            onChange={e => { setSymbol(e.target.value); setHighlightedIdx(-1); }}
                             onFocus={() => symbol.length > 1 && setShowDropdown(true)}
+                            onKeyDown={e => {
+                                if (!showDropdown || filteredStocks.length === 0) return;
+                                if (e.key === 'ArrowDown') {
+                                    e.preventDefault();
+                                    setHighlightedIdx(prev => Math.min(prev + 1, filteredStocks.length - 1));
+                                } else if (e.key === 'ArrowUp') {
+                                    e.preventDefault();
+                                    setHighlightedIdx(prev => Math.max(prev - 1, 0));
+                                } else if (e.key === 'Enter' && highlightedIdx >= 0) {
+                                    e.preventDefault();
+                                    setSymbol(filteredStocks[highlightedIdx].symbol);
+                                    setShowDropdown(false);
+                                    setHighlightedIdx(-1);
+                                } else if (e.key === 'Escape') {
+                                    setShowDropdown(false);
+                                    setHighlightedIdx(-1);
+                                }
+                            }}
                             className="p-3 pr-10 bg-bg-main border border-transparent focus:border-cta rounded-xl w-full outline-none transition-all"
                         />
                         <Search className="w-4 h-4 text-text-muted absolute right-4 pointer-events-none" />
@@ -277,8 +319,10 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                                         onClick={() => {
                                             setSymbol(s.symbol);
                                             setShowDropdown(false);
+                                            setHighlightedIdx(-1);
                                         }}
-                                        className="p-3 hover:bg-bg-main cursor-pointer flex justify-between items-center border-b border-border-soft/30 last:border-0"
+                                        className={`p-3 cursor-pointer flex justify-between items-center border-b border-border-soft/30 last:border-0 transition-colors
+                                            ${idx === highlightedIdx ? 'bg-cta/10 border-l-2 border-l-cta' : 'hover:bg-bg-main'}`}
                                     >
                                         <div className="flex flex-col">
                                             <span className="font-bold text-sm">{s.symbol}</span>
@@ -304,30 +348,23 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                 </div>
                 <div className="col-span-3 flex flex-col gap-2">
                     <label className="text-xs font-semibold uppercase tracking-wider text-text-muted flex justify-between items-center">
-                        CMP ({currency})
+                        <span className="flex items-center gap-1.5">
+                            CMP ({currency})
+                            {priceSource && <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />}
+                        </span>
                         {isFetchingPrice ? (
                             <RefreshCw className="w-2.5 h-2.5 animate-spin text-cta" />
-                        ) : (
-                            <span className="text-[10px] text-cta/70 font-bold">{priceSource}</span>
-                        )}
+                        ) : priceSource ? (
+                            <span className="text-[9px] text-text-muted/60 font-medium">{priceSource}</span>
+                        ) : null}
                     </label>
-                    <div className="relative group">
-                        <input
-                            type="number"
-                            value={entry}
-                            onChange={e => setEntry(Number(e.target.value))}
-                            className={`w-full p-4 bg-bg-main border-2 ${priceFreshness === "LIVE" ? "border-green-500/30" : priceFreshness === "DELAYED" ? "border-amber-500/30" : "border-transparent"} focus:border-cta rounded-2xl outline-none transition-all text-xl font-bold`}
-                            placeholder="0.00"
-                        />
-                        {priceFreshness !== "IDLE" && (
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                <div className={`w-2 h-2 rounded-full animate-pulse ${priceFreshness === "LIVE" ? "bg-green-500" : "bg-amber-500"}`} />
-                                <span className={`text-[10px] font-bold uppercase tracking-widest ${priceFreshness === "LIVE" ? "text-green-500" : "text-amber-500"}`}>
-                                    {priceFreshness === "LIVE" ? "Live" : "Delayed"}
-                                </span>
-                            </div>
-                        )}
-                    </div>
+                    <input
+                        type="number"
+                        value={entry}
+                        onChange={e => setEntry(Number(e.target.value))}
+                        className="w-full p-3 bg-bg-main border border-transparent focus:border-cta rounded-xl outline-none transition-all text-lg font-bold"
+                        placeholder="0.00"
+                    />
                 </div>
                 <div className="col-span-3 flex flex-col gap-2">
                     <label className="text-xs font-semibold uppercase tracking-wider text-text-muted">Stop Loss ({currency})</label>
@@ -366,8 +403,49 @@ export function PositionSizer({ onExecute }: { onExecute?: (data: any) => void }
                 </div>
             </div>
 
+            {/* Trade Reason — subtle dropdown with hashtags */}
+            <div className="relative mb-4">
+                <button
+                    type="button"
+                    onClick={() => setShowTagDropdown(!showTagDropdown)}
+                    className="flex items-center gap-2 text-xs text-text-muted hover:text-cta transition-colors cursor-pointer mx-auto"
+                >
+                    <Tag className="w-3 h-3" />
+                    {selectedTags.length > 0 ? (
+                        <span className="flex items-center gap-1.5 flex-wrap justify-center">
+                            {selectedTags.map(id => {
+                                const tag = TRADE_TAGS.find(t => t.id === id);
+                                return <span key={id} className="text-cta font-semibold">{tag?.label}</span>;
+                            })}
+                        </span>
+                    ) : (
+                        <span className="italic">Add trade reason (optional)</span>
+                    )}
+                </button>
+
+                {showTagDropdown && (
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-[420px] bg-bg-panel border border-border-soft rounded-xl shadow-2xl z-50 p-3 max-h-48 overflow-y-auto custom-scrollbar">
+                        <div className="flex flex-wrap gap-1.5">
+                            {TRADE_TAGS.map(tag => (
+                                <button
+                                    key={tag.id}
+                                    type="button"
+                                    onClick={() => toggleTag(tag.id)}
+                                    className={`px-2.5 py-1 rounded-full text-[11px] font-medium border transition-all duration-200 cursor-pointer
+                                        ${selectedTags.includes(tag.id)
+                                            ? 'bg-cta/15 text-cta border-cta/30 font-semibold'
+                                            : 'bg-bg-main text-text-muted border-border-soft hover:border-cta/20 hover:text-text-main'}`}
+                                >
+                                    {tag.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
             <button
-                onClick={() => onExecute && onExecute({ symbol, qty, entry, sl, target, market, direction, netProfit })}
+                onClick={() => { setShowTagDropdown(false); onExecute && onExecute({ symbol, qty, entry, sl, target, market, direction, netProfit, tags: selectedTags }); }}
                 disabled={!symbol || !qty || !entry}
                 className="w-full max-w-md mx-auto h-14 bg-cta hover:bg-cta-hover text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >

@@ -10,6 +10,7 @@ import { useApp } from "@/context/AppContext";
 import { LivePositions } from "@/components/LivePositions";
 import { Journal } from "@/components/Journal";
 import { Analytics } from "@/components/Analytics";
+import { Settings } from "@/components/Settings";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
@@ -49,14 +50,14 @@ export default function Home() {
               case 'analytics':
                 return <Analytics />;
               case 'settings':
-                return <div className="p-12 text-center text-text-muted italic border border-dashed border-border-soft rounded-2xl">Settings module coming soon...</div>;
+                return <Settings />;
               default:
                 return (
-                  <div className="flex gap-8 items-stretch pb-8">
-                    {/* Left Column (35%) */}
-                    <div className="w-[35%] flex flex-col gap-8">
+                  <div className="flex gap-8 pb-8" style={{ alignItems: 'stretch' }}>
+                    {/* Left Column (35%) — stretches to match right column */}
+                    <div className="w-[35%] flex flex-col gap-8" style={{ minHeight: 0 }}>
                       <PreTradeGuard />
-                      <div className="flex-1 min-h-0">
+                      <div className="flex-1 min-h-0 overflow-hidden">
                         <NewsTerminal />
                       </div>
                     </div>
@@ -75,14 +76,14 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-bg-main text-text-main font-inter">
+    <div className="flex h-screen w-full overflow-hidden bg-bg-main text-text-main font-dmsans">
       <Sidebar />
 
       {/* Main Workspace */}
       <main className="flex-1 overflow-y-auto p-12 bg-bg-main relative">
         <header className="mb-10 flex justify-between items-start">
           <div>
-            <h1 className="font-cormorant text-4xl font-bold text-text-main mb-2">Plan Execution</h1>
+            <h1 className="font-outfit text-4xl font-bold text-text-main mb-2">Plan Execution</h1>
             <p className="text-text-muted">Define your edge, calculate risk, and execute flawlessly.</p>
           </div>
 

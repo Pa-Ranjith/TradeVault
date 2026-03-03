@@ -42,7 +42,7 @@ export function DailyLimitDropdown() {
                 className="bg-bg-panel border border-border-soft rounded-lg h-11 px-3 flex items-center gap-2 cursor-pointer shadow-soft hover:bg-bg-main transition-colors"
             >
                 <Shield className="w-4 h-4 text-text-muted" />
-                <span className="font-inter text-sm font-semibold text-text-main whitespace-nowrap">
+                <span className="font-dmsans text-sm font-semibold text-text-main whitespace-nowrap">
                     Daily Limit: {currency}{dailyLimit.toLocaleString(currency === '₹' ? 'en-IN' : 'en-US')}
                 </span>
                 <ChevronDown className="w-3.5 h-3.5 text-text-muted" />

@@ -84,9 +84,9 @@ export function LivePositions() {
                                                 {trade.direction}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 font-inter font-medium">{trade.qty}</td>
-                                        <td className="px-6 py-4 font-inter font-medium">{currency}{fmt(trade.entry)}</td>
-                                        <td className="px-6 py-4 font-inter font-medium">{currency}{fmt(trade.entry)}</td>
+                                        <td className="px-6 py-4 font-dmsans font-medium">{trade.qty}</td>
+                                        <td className="px-6 py-4 font-dmsans font-medium">{currency}{fmt(trade.entry)}</td>
+                                        <td className="px-6 py-4 font-dmsans font-medium">{currency}{fmt(trade.entry)}</td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-1 font-bold text-secondary animate-pulse">
                                                 <ArrowUpRight className="w-3 h-3" />
