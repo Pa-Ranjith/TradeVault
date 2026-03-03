@@ -57,14 +57,14 @@ export function NewsTerminal() {
             <div className="flex justify-between items-center px-4 py-2.5 border-b border-border-soft/50 shrink-0">
                 <div className="flex items-center gap-1.5">
                     <Globe className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-sm font-semibold text-text-main">Market Updates</span>
+                    <span className="text-2xl font-black text-text-main tracking-tighter uppercase whitespace-nowrap">Market Updates</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-text-muted flex items-center gap-1">
-                        <RefreshCw className={`w-2 h-2 ${loading ? 'animate-spin' : ''}`} />
+                    <span className="text-base text-text-muted flex items-center gap-2 font-black tabular-nums">
+                        <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''} text-primary`} />
                         {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    <div className="bg-danger/10 text-danger px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest animate-pulse">LIVE</div>
+                    <div className="bg-danger/15 text-danger border border-danger/30 px-3.5 py-1.5 rounded-lg text-sm font-black tracking-[0.3em] animate-pulse">LIVE FEED</div>
                 </div>
             </div>
 
@@ -76,11 +76,11 @@ export function NewsTerminal() {
                         href={a.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex gap-3 px-3 py-2.5 border-b border-border-soft/30 hover:bg-bg-main/50 transition-colors group cursor-pointer"
+                        className="flex gap-4 px-4 py-4 border-b border-border-soft/30 hover:bg-bg-main/50 transition-colors group cursor-pointer"
                     >
                         {/* Thumbnail — small square */}
                         {a.image && (
-                            <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-bg-main">
+                            <div className="w-28 h-28 rounded-xl overflow-hidden shrink-0 bg-bg-main border border-border-soft shadow-lg">
                                 <img
                                     src={a.image}
                                     alt=""
@@ -93,23 +93,23 @@ export function NewsTerminal() {
                         {/* Content */}
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                             {/* Top row: category + freshness */}
-                            <div className="flex justify-between items-center mb-1">
-                                <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full leading-none ${CAT_COLORS[a.category] || CAT_COLORS.BUSINESS}`}>
+                            <div className="flex justify-between items-center mb-1.5">
+                                <span className={`text-sm font-black uppercase tracking-widest px-3 py-1.5 rounded-full leading-none shadow-md ${CAT_COLORS[a.category] || CAT_COLORS.BUSINESS}`}>
                                     {a.category}
                                 </span>
-                                <span className="text-[10px] text-text-muted tabular-nums">{a.freshness}</span>
+                                <span className="text-sm text-text-muted font-black tabular-nums tracking-tighter">{a.freshness}</span>
                             </div>
 
                             {/* Title — 2 lines max */}
-                            <h3 className="text-xs font-semibold line-clamp-2 leading-snug text-text-main group-hover:text-primary transition-colors">
+                            <h3 className="text-[18px] font-black line-clamp-2 leading-relaxed text-text-main group-hover:text-primary transition-colors tracking-tight mb-3">
                                 {a.title}
                             </h3>
 
                             {/* Source + CTA */}
-                            <div className="flex justify-between items-center mt-1">
-                                <span className="text-[10px] text-text-muted font-medium">{a.source}</span>
-                                <span className="text-[10px] font-bold text-cta opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
-                                    Read <ExternalLink className="w-2 h-2" />
+                            <div className="flex justify-between items-center mt-2">
+                                <span className="text-sm text-text-muted font-black uppercase tracking-widest opacity-60">{a.source}</span>
+                                <span className="text-sm font-black text-cta opacity-0 group-hover:opacity-100 transition-all flex items-center gap-2 translate-x-2 group-hover:translate-x-0">
+                                    SEE FULL STORY <ExternalLink className="w-5 h-5" />
                                 </span>
                             </div>
                         </div>
