@@ -57,14 +57,14 @@ export function NewsTerminal() {
             <div className="flex justify-between items-center px-4 py-2.5 border-b border-border-soft/50 shrink-0">
                 <div className="flex items-center gap-1.5">
                     <Globe className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs font-semibold text-text-main">Market Updates</span>
+                    <span className="text-sm font-semibold text-text-main">Market Updates</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                    <span className="text-[8px] text-text-muted flex items-center gap-1">
+                    <span className="text-[10px] text-text-muted flex items-center gap-1">
                         <RefreshCw className={`w-2 h-2 ${loading ? 'animate-spin' : ''}`} />
                         {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    <div className="bg-danger/10 text-danger px-1 py-0.5 rounded text-[7px] font-bold tracking-widest animate-pulse">LIVE</div>
+                    <div className="bg-danger/10 text-danger px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest animate-pulse">LIVE</div>
                 </div>
             </div>
 
@@ -94,21 +94,21 @@ export function NewsTerminal() {
                         <div className="flex-1 min-w-0 flex flex-col justify-between">
                             {/* Top row: category + freshness */}
                             <div className="flex justify-between items-center mb-1">
-                                <span className={`text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full leading-none ${CAT_COLORS[a.category] || CAT_COLORS.BUSINESS}`}>
+                                <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full leading-none ${CAT_COLORS[a.category] || CAT_COLORS.BUSINESS}`}>
                                     {a.category}
                                 </span>
-                                <span className="text-[8px] text-text-muted tabular-nums">{a.freshness}</span>
+                                <span className="text-[10px] text-text-muted tabular-nums">{a.freshness}</span>
                             </div>
 
                             {/* Title — 2 lines max */}
-                            <h3 className="text-[11px] font-semibold line-clamp-2 leading-tight text-text-main group-hover:text-primary transition-colors">
+                            <h3 className="text-xs font-semibold line-clamp-2 leading-snug text-text-main group-hover:text-primary transition-colors">
                                 {a.title}
                             </h3>
 
                             {/* Source + CTA */}
                             <div className="flex justify-between items-center mt-1">
-                                <span className="text-[8px] text-text-muted">{a.source}</span>
-                                <span className="text-[8px] font-bold text-cta opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                                <span className="text-[10px] text-text-muted font-medium">{a.source}</span>
+                                <span className="text-[10px] font-bold text-cta opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                                     Read <ExternalLink className="w-2 h-2" />
                                 </span>
                             </div>
