@@ -1,13 +1,16 @@
 [build]
-  # The directory where the Next.js app lives
+  # INSTRUCTION: Tell Netlify where the actual app lives. 
+  # Since our app is inside the "frontend" folder, we set the base here.
   base = "frontend"
   
-  # The command to run within that directory
+  # INSTRUCTION: The specific "Recipe" to build the app.
+  # "npm run build" converts our development code into a fast, live website.
   command = "npm run build"
   
-  # The directory where Next.js outputs the build (relative to base)
+  # INSTRUCTION: Where the finished website files are stored after building.
+  # Next.js puts everything in a folder called ".next".
   publish = ".next"
 
-# This plugin is recommended for Next.js sites on Netlify
+# This plugin makes Next.js work perfectly with Netlify's features.
 [[plugins]]
   package = "@netlify/plugin-nextjs"
