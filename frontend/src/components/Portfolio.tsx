@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
     LayoutDashboard,
     PieChart,
@@ -12,11 +12,40 @@ import {
     AlertTriangle,
     Target,
     Zap,
-    Briefcase
+    Briefcase,
+    Loader2
 } from "lucide-react";
+import { parsePortfolioFile } from "../lib/portfolioParser";
+import { analyzePortfolio } from "../services/nvidiaApi";
+import { PortfolioAIAnalyst } from "./PortfolioAIAnalyst";
 
 export function Portfolio() {
     const [selectedTab, setSelectedTab] = useState("dashboard");
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [aiData, setAiData] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setIsAnalyzing(true);
+        setAiData(null); // Reset previous analysis
+
+        try {
+            const portfolioData = await parsePortfolioFile(file);
+            console.log("Parsed Data:", portfolioData);
+            
+            const aiResponse = await analyzePortfolio(portfolioData);
+            setAiData(aiResponse || null);
+            
+        } catch (error) {
+            console.error("Error analyzing portfolio:", error);
+            alert(error instanceof Error ? error.message : "Failed to analyze portfolio");
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
 
     // Mock Data for Extensive Analytics
     const capDistribution = [
@@ -207,34 +236,51 @@ export function Portfolio() {
 
             {selectedTab === 'import' && (
                 <div className="max-w-4xl mx-auto w-full">
-                    <div className="bg-bg-panel border-2 border-dashed border-border-soft rounded-[40px] p-20 flex flex-col items-center justify-center text-center group hover:border-cta/40 hover:bg-bg-panel/60 transition-all cursor-pointer">
-                        <div className="w-24 h-24 bg-cta/5 group-hover:bg-cta/10 rounded-full flex items-center justify-center mb-8 transition-all group-hover:scale-110">
-                            <Upload className="w-10 h-10 text-cta" />
+                    {isAnalyzing ? (
+                        <div className="bg-bg-panel border border-border-soft rounded-[40px] p-20 flex flex-col items-center justify-center text-center">
+                            <Loader2 className="w-16 h-16 text-cta animate-spin mb-6" />
+                            <h2 className="text-2xl font-outfit font-bold text-text-main mb-2">Analyzing Your Portfolio</h2>
+                            <p className="text-text-muted">Extracting alpha signals and sector distribution via NVIDIA Inference Microservices...</p>
                         </div>
-                        <h2 className="text-3xl font-outfit font-bold text-text-main mb-4">Connect Your Brokerage</h2>
-                        <p className="text-text-muted mb-10 max-w-md">
-                            Drag and drop your trade CSV file, or connect directly to your account using our secure API bridge.
-                        </p>
+                    ) : aiData ? (
+                        <PortfolioAIAnalyst data={aiData} onReset={() => setAiData(null)} />
+                    ) : (
+                        <div 
+                            onClick={() => fileInputRef.current?.click()}
+                            className="bg-bg-panel border-2 border-dashed border-border-soft rounded-[40px] p-20 flex flex-col items-center justify-center text-center group hover:border-cta/40 hover:bg-bg-panel/60 transition-all cursor-pointer relative overflow-hidden"
+                        >
+                            <input 
+                                type="file" 
+                                ref={fileInputRef} 
+                                className="hidden" 
+                                accept=".csv, .xlsx, .xls"
+                                onChange={handleFileUpload}
+                            />
+                            
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-cta/5 rounded-full -mr-20 -mt-20 blur-3xl group-hover:bg-cta/10 transition-colors"></div>
+                            
+                            <div className="w-24 h-24 bg-cta/5 group-hover:bg-cta/10 rounded-full flex items-center justify-center mb-8 transition-all group-hover:scale-110 relative z-10">
+                                <Upload className="w-10 h-10 text-cta" />
+                            </div>
+                            <h2 className="text-3xl font-outfit font-bold text-text-main mb-4 relative z-10">AI Analyst: Upload Portfolio</h2>
+                            <p className="text-text-muted mb-6 max-w-md relative z-10 block">
+                                Upload your portfolio (.csv or .xlsx). Powered by <span className="font-bold text-[#76B900]">NVIDIA</span> AI, we will analyze your distribution, risk, and generate tactical reallocation suggestions.
+                            </p>
 
-                        <div className="flex flex-wrap gap-4 justify-center">
-                            <div className="px-6 py-3 bg-bg-main border border-border-soft rounded-2xl flex items-center gap-3 grayscale hover:grayscale-0 transition-all cursor-pointer">
-                                <span className="font-bold text-sm">Dhan</span>
+                            <div className="flex flex-wrap gap-4 justify-center relative z-10">
+                                <div className="px-6 py-3 bg-bg-main border border-border-soft rounded-2xl flex items-center gap-3">
+                                    <span className="font-bold text-sm text-text-muted">.CSV Supported</span>
+                                </div>
+                                <div className="px-6 py-3 bg-bg-main border border-border-soft rounded-2xl flex items-center gap-3">
+                                    <span className="font-bold text-sm text-text-muted">.XLSX Supported</span>
+                                </div>
                             </div>
-                            <div className="px-6 py-3 bg-bg-main border border-border-soft rounded-2xl flex items-center gap-3 grayscale hover:grayscale-0 transition-all cursor-pointer">
-                                <span className="font-bold text-sm">Alpaca</span>
-                            </div>
-                            <div className="px-6 py-3 bg-bg-main border border-border-soft rounded-2xl flex items-center gap-3 grayscale hover:grayscale-0 transition-all cursor-pointer">
-                                <span className="font-bold text-sm">Angel One</span>
-                            </div>
-                            <div className="px-6 py-3 bg-bg-main border border-border-soft rounded-2xl flex items-center gap-3 grayscale hover:grayscale-0 transition-all cursor-pointer">
-                                <span className="font-bold text-sm">Upstox</span>
-                            </div>
-                        </div>
 
-                        <div className="mt-12 flex items-center gap-4 text-text-muted text-xs font-semibold">
-                            <ShieldCheck className="w-4 h-4 text-[#00b894]" /> Your data is encrypted and never stored on our servers.
+                            <div className="mt-12 flex items-center gap-4 text-text-muted text-xs font-semibold relative z-10">
+                                <ShieldCheck className="w-4 h-4 text-[#00b894]" /> Your data is parsed locally. ONLY anonymized, prompt-structured data is sent to NVIDIA APIs.
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             )}
         </div>
